@@ -501,6 +501,8 @@ function sortByAsc(arr) {
  */
 function shuffleChar(str, iterations) {
   const len = str.length;
+  const visited = {};
+
   let indices = Array(len);
   for (let i = 0; i < len; i += 1) {
     indices[i] = i;
@@ -521,6 +523,20 @@ function shuffleChar(str, iterations) {
       }
     }
 
+    let key = '';
+    for (let i = 0; i < newIndices.length; i += 1) {
+      if (i > 0) {
+        key += ',';
+      }
+      key += newIndices[i];
+    }
+
+    if (key in visited) {
+      const cycleLength = it - visited[key];
+      const remainIts = (iterations - it) % cycleLength;
+      return shuffleChar(str, remainIts);
+    }
+    visited[key] = it;
     indices = newIndices;
   }
 
